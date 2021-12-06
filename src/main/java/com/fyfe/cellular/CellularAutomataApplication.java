@@ -17,6 +17,6 @@ public class CellularAutomataApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Hello World");
+        System.out.println("Starting...");
     }
 }

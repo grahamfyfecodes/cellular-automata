@@ -1,30 +1,52 @@
 package com.fyfe.cellular.view;
 
+import com.fyfe.cellular.model.Grid;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.stream.IntStream;
 
-@Component
 public class GridView extends JPanel {
+
+    private final Grid grid;
+    private final int width;
+    private final int height;
+    private final int cellWidth;
+    private final int cellHeight;
+
+    public GridView(Grid grid, int width, int height) {
+        this.grid = grid;
+        this.width = width;
+        this.height = height - 40;
+        this.cellWidth = width / grid.getRows();
+        this.cellHeight = this.height / grid.getCols();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        paintGrid(g);
+    }
 
-        var center = new Point(getWidth() / 2, getHeight() / 2);
-        var radius = Math.min(getWidth() / 2, getHeight() / 2) - 5;
-        var diameter = radius * 2;
-        var innerRadius = (int)(radius * 0.9);
-        var innerDiameter = innerRadius * 2;
-        var barWidth = (int)(innerRadius * 1.4);
-        var barHeight = (int)(innerRadius * 0.35);
+    private void paintGrid(Graphics g) {
+        IntStream.range(1, grid.getRows()).forEach(i ->
+                drawRows(g, i)
+        );
+        IntStream.range(1, grid.getCols()).forEach(i ->
+                drawCols(g, i)
+        );
+    }
 
-        g.setColor(Color.WHITE);
-        g.fillOval(center.x - radius, center.y - radius, diameter, diameter);
-        g.setColor(Color.RED);
-        g.fillOval(center.x - innerRadius, center.y - innerRadius, innerDiameter, innerDiameter);
-        g.setColor(Color.WHITE);
-        g.fillRect(center.x - barWidth/2, center.y - barHeight/2, barWidth, barHeight);
+    private void drawRows(Graphics g, int i) {
+        g.drawLine(
+                0, i * cellHeight, width, i * cellHeight
+        );
+    }
+
+    private void drawCols(Graphics g, int i) {
+        g.drawLine(
+                i * cellWidth, 0,i * cellWidth, height
+        );
     }
 }
