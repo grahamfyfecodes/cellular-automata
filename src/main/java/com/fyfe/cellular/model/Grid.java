@@ -1,5 +1,10 @@
 package com.fyfe.cellular.model;
 
+import com.fyfe.cellular.util.Pair;
+
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 public class Grid {
 
     private final int rows;
@@ -31,5 +36,45 @@ public class Grid {
 
     public int getCols() {
         return cols;
+    }
+
+    public Stream<Cell> stream() {
+        return IntStream.range(0, rows * cols)
+                .mapToObj(n -> new Pair<>(n % rows, n / cols))
+                .map(p -> new Cell(p.x(), p.y(), grid[p.x()][p.y()]));
+    }
+
+    public static class Cell {
+
+        private final int x;
+        private final int y;
+        private final boolean value;
+
+        private Cell(int x, int y, boolean value) {
+            this.x = x;
+            this.y = y;
+            this.value = value;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public boolean isValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return "Cell{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    ", value=" + value +
+                    '}';
+        }
     }
 }
